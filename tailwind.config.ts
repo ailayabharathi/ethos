@@ -19,8 +19,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        fandom: ["'DC Fandom'", "cursive"], // New font family for the custom font
-        japanese: ["'Noto Sans JP'", "sans-serif"], // Kept for reference, but not used for greeting
+        fandom: ["'DC Fandom'", "cursive"], // Custom font for Dashboard greeting
+        ramen: ["'Japan Ramen'", "cursive"], // New custom font for Workout Log
+        japanese: ["'Noto Sans JP'", "sans-serif"], // Kept for reference
       },
       colors: {
         border: "hsl(var(--border))",

@@ -7,7 +7,7 @@ import { WorkoutTypeSection } from "@/components/workout/WorkoutTypeSection";
 const WorkoutLog = () => {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Workout Log</h1>
+      <h1 className="text-3xl font-bold font-ramen">Workout Log</h1>
       <p className="text-muted-foreground">Log your exercises and track your fitness progress.</p>
 
       <Tabs defaultValue="home" className="w-full">
