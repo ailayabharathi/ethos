@@ -18,16 +18,8 @@ interface ScheduleItem {
 
 const LOCAL_STORAGE_KEY = "timeScheduleTasks";
 
-// Predefined tasks for initial load if localStorage is empty
-const initialDailyTasks: ScheduleItem[] = [
-  { id: "task-1", task: "Wake up: 5:30 am", completed: false },
-  { id: "task-2", task: "Study time: 5:45 am - 6:50 am", completed: false }, // Updated
-  { id: "task-7", task: "Shower: 6:50 am - 7:00 am", completed: false }, // New task
-  { id: "task-3", task: "Class start: 8:30 am", completed: false },
-  { id: "task-4", task: "Gym: 5:30 pm - 7:00 pm", completed: false },
-  { id: "task-5", task: "Cook and Study: 8:30 pm", completed: false },
-  { id: "task-6", task: "Light walking: 8:45 pm - 9:00 pm", completed: false },
-];
+// Removed predefined tasks for initial load. Now starts empty.
+const initialDailyTasks: ScheduleItem[] = [];
 
 const TimeSchedule = () => {
   const [tasks, setTasks] = useState<ScheduleItem[]>(() =>

@@ -26,36 +26,8 @@ interface LearningTopic {
 
 const LOCAL_STORAGE_KEY = "selfLearningTopics";
 
-const initialLearningTopics: LearningTopic[] = [
-  {
-    id: "topic-1",
-    title: "Network Security Fundamentals",
-    description: `Firewalls: Devices or software that control incoming and outgoing network traffic based on security rules, essential for perimeter defense.
-
-Intrusion Detection Systems (IDS): Monitors network traffic for suspicious activity and alerts administrators. It can be signature-based or anomaly-based.
-
-Encryption: Protects data privacy and integrity by converting it into a secure format during transmission or storage, using protocols such as SSL/TLS, AES, or RSA.
-
-Common Network Vulnerabilities: Include open ports, weak passwords, unpatched software, poorly configured devices, and inadequate monitoring.
-
-Security Practices: Regular updates and patching, strong access controls, network segmentation, VPNs, and continuous monitoring.`,
-    completed: false,
-  },
-  {
-    id: "topic-2",
-    title: "Ethical Hacking & Penetration Testing",
-    description: `Basics of Ethical Hacking: Ethical hacking involves authorized testing of computer systems to find security weaknesses before malicious hackers do. It operates under a strict legal and ethical framework.
-
-Vulnerability Assessment: This is the process of identifying, quantifying, and prioritizing vulnerabilities in a system. Tools like Nessus, OpenVAS, or Qualys are commonly used for scanning.
-
-Penetration Testing: Also called pen-testing, this simulates cyberattacks on a system to assess its security by exploiting vulnerabilities. It includes phases like planning, scanning, gaining access, maintaining access, and reporting.
-
-Common Techniques: Includes network scanning, social engineering, exploiting software bugs, and password attacks.
-
-Purpose: Enhances security posture by addressing vulnerabilities, improving defenses, and complying with regulations.`,
-    completed: false,
-  },
-];
+// Removed predefined learning topics for initial load. Now starts empty.
+const initialLearningTopics: LearningTopic[] = [];
 
 const SelfLearningTopics = () => {
   const [topics, setTopics] = useState<LearningTopic[]>(() =>
