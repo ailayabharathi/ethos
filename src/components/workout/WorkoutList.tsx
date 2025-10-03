@@ -151,7 +151,7 @@ export function WorkoutList({
                       )}
                     >
                       {workout.name} - {workout.sets} sets of {workout.reps} reps
-                      {workoutType === "gym" && workout.weight !== undefined && workout.weight !== null && ` at ${workout.weight}kg`}
+                      {workoutType === "gym" && typeof workout.weight === 'number' && workout.weight > 0 && ` at ${workout.weight}kg`}
                       <span className="text-sm text-muted-foreground ml-2">({format(new Date(workout.date), "PPP")})</span>
                     </Label>
                   )}
