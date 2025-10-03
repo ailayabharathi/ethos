@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, DollarSign, Dumbbell, BookOpen } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@/components/auth/SessionContextProvider';
+import { format } from "date-fns";
 
 const Dashboard = () => {
   const { session } = useSession();
@@ -12,6 +13,8 @@ const Dashboard = () => {
 
   const [completedTasksCount, setCompletedTasksCount] = useState(0);
   const [loadingTasks, setLoadingTasks] = useState(true);
+  const [todaySpending, setTodaySpending] = useState(0);
+  const [loadingSpending, setLoadingSpending] = useState(true);
 
   useEffect(() => {
     const fetchCompletedTasks = async () => {
@@ -37,6 +40,34 @@ const Dashboard = () => {
     };
 
     fetchCompletedTasks();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchTodaySpending = async () => {
+      if (!userId) {
+        setTodaySpending(0);
+        setLoadingSpending(false);
+        return;
+      }
+      setLoadingSpending(true);
+      const today = format(new Date(), "yyyy-MM-dd");
+      const { data, error } = await supabase
+        .from('expenses')
+        .select('amount')
+        .eq('user_id', userId)
+        .eq('date', today);
+
+      if (error) {
+        console.error("Error fetching today's spending:", error.message);
+        setTodaySpending(0);
+      } else {
+        const total = data?.reduce((sum, expense) => sum + parseFloat(expense.amount as any), 0) || 0;
+        setTodaySpending(total);
+      }
+      setLoadingSpending(false);
+    };
+
+    fetchTodaySpending();
   }, [userId]);
 
   return (
@@ -69,9 +100,11 @@ const Dashboard = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$0.00</div>
+            <div className="text-2xl font-bold">
+              {loadingSpending ? "..." : `$${todaySpending.toFixed(2)}`}
+            </div>
             <p className="text-xs text-muted-foreground">
-              No spending recorded
+              {loadingSpending ? "Loading..." : (todaySpending === 0 ? "No spending recorded" : "From your spending tracker")}
             </p>
           </CardContent>
         </Card>
