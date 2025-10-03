@@ -103,7 +103,7 @@ const SpendingTracker = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Spending Tracker</h1>
+      <h1 className="text-3xl font-bold font-holdmoney">Spending Tracker</h1> {/* Applied font-holdmoney */}
       <p className="text-muted-foreground">Keep track of your daily expenses and visualize your spending habits.</p>
 
       <ExpenseForm onAddExpense={handleAddExpense} />
