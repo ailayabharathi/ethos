@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { getCroppedImg } from '@/lib/imageUtils';
 import { RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+import { Label } from '@/components/ui/label'; // Added missing import
 
 interface ProfilePictureCropperProps {
   imageSrc: string;
