@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -17,41 +17,84 @@ import { CalendarIcon, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ProfilePictureCropper } from "@/components/settings/ProfilePictureCropper";
-import { supabase } from '@/integrations/supabase/client'; // Import supabase client
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
+import { useSession } from '@/components/auth/SessionContextProvider';
+import { dataURLtoFile } from '@/lib/imageUtils'; // Import the new utility
 
 interface UserAccountSettings {
-  firstName: string;
-  lastName: string;
+  first_name: string; // Changed to match Supabase column
+  last_name: string;  // Changed to match Supabase column
   age: number | '';
   height: number | ''; // Assuming cm
   weight: number | ''; // Assuming kg
   birthDate: string | undefined; // Stored as YYYY-MM-DD string
-  avatarUrl: string | undefined; // Stored as data URL string
+  avatar_url: string | undefined; // Changed to match Supabase column, stored as Supabase Storage URL
 }
 
-const LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY = "userAccountSettings";
+// Keep local storage for non-Supabase managed settings like age, height, weight, birthDate
+const LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY = "userAccountSettingsLocal";
 
 const SettingsPage = () => {
   const { theme, setTheme } = useTheme();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const { session } = useSession();
+  const userId = session?.user?.id;
+
   const [accountSettings, setAccountSettings] = useState<UserAccountSettings>(() =>
     loadState(LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY, {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       age: "",
       height: "",
       weight: "",
       birthDate: undefined,
-      avatarUrl: undefined,
+      avatar_url: undefined,
     })
   );
   const [isCropperOpen, setIsCropperOpen] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
+  // Effect for local storage (for non-Supabase fields)
   useEffect(() => {
-    saveState(LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY, accountSettings);
-  }, [accountSettings]);
+    saveState(LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY, {
+      age: accountSettings.age,
+      height: accountSettings.height,
+      weight: accountSettings.weight,
+      birthDate: accountSettings.birthDate,
+    });
+  }, [accountSettings.age, accountSettings.height, accountSettings.weight, accountSettings.birthDate]);
+
+  // Effect to load profile from Supabase
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!userId) {
+        setLoadingProfile(false);
+        return;
+      }
+      setLoadingProfile(true);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, avatar_url')
+        .eq('id', userId)
+        .single();
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
+        toast.error("Failed to load profile: " + error.message);
+      } else if (data) {
+        setAccountSettings((prev) => ({
+          ...prev,
+          first_name: data.first_name || "",
+          last_name: data.last_name || "",
+          avatar_url: data.avatar_url || undefined,
+        }));
+      }
+      setLoadingProfile(false);
+    };
+
+    fetchProfile();
+  }, [userId]);
 
   const handleDarkModeToggle = (checked: boolean) => {
     setTheme(checked ? "dark" : "light");
@@ -62,6 +105,13 @@ const SettingsPage = () => {
     setAccountSettings((prevSettings) => ({
       ...prevSettings,
       [id]: id === "age" || id === "height" || id === "weight" ? (value === "" ? "" : Number(value)) : value,
+    }));
+  };
+
+  const handleSupabaseInputChange = (id: 'first_name' | 'last_name', value: string) => {
+    setAccountSettings((prevSettings) => ({
+      ...prevSettings,
+      [id]: value,
     }));
   };
 
@@ -84,19 +134,80 @@ const SettingsPage = () => {
     }
   };
 
-  const handleCropComplete = (croppedImage: string) => {
-    setAccountSettings((prevSettings) => ({
-      ...prevSettings,
-      avatarUrl: croppedImage,
-    }));
-    toast.success("Profile picture updated!");
-    setIsCropperOpen(false);
-    setImageToCrop(null);
-  };
+  const handleCropComplete = useCallback(async (croppedImage: string) => {
+    if (!userId) {
+      toast.error("User not authenticated.");
+      return;
+    }
 
-  const handleSaveAccountSettings = () => {
-    saveState(LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY, accountSettings);
-    toast.success("Account settings saved successfully!");
+    try {
+      const file = dataURLtoFile(croppedImage, `avatar_${userId}.jpeg`);
+      const filePath = `${userId}/avatar.jpeg`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true, // Overwrite existing avatar
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      if (!publicUrlData?.publicUrl) {
+        throw new Error("Failed to get public URL for avatar.");
+      }
+
+      const { error: updateProfileError } = await supabase
+        .from('profiles')
+        .upsert({ id: userId, avatar_url: publicUrlData.publicUrl });
+
+      if (updateProfileError) {
+        throw updateProfileError;
+      }
+
+      setAccountSettings((prevSettings) => ({
+        ...prevSettings,
+        avatar_url: publicUrlData.publicUrl,
+      }));
+      toast.success("Profile picture updated!");
+    } catch (e: any) {
+      toast.error("Failed to update profile picture: " + e.message);
+      console.error("Avatar upload/update error:", e);
+    } finally {
+      setIsCropperOpen(false);
+      setImageToCrop(null);
+    }
+  }, [userId]);
+
+  const handleSaveAccountSettings = async () => {
+    if (!userId) {
+      toast.error("User not authenticated.");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          id: userId,
+          first_name: accountSettings.first_name,
+          last_name: accountSettings.last_name,
+        });
+
+      if (error) {
+        throw error;
+      }
+      toast.success("Account settings saved successfully!");
+    } catch (e: any) {
+      toast.error("Failed to save account settings: " + e.message);
+      console.error("Save account settings error:", e);
+    }
   };
 
   const handleLogout = async () => {
@@ -105,9 +216,17 @@ const SettingsPage = () => {
       toast.error("Failed to log out: " + error.message);
     } else {
       toast.success("Logged out successfully!");
-      navigate('/login'); // Redirect to login page
+      navigate('/login');
     }
   };
+
+  if (loadingProfile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Loading profile settings...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -145,7 +264,7 @@ const SettingsPage = () => {
           <div className="flex flex-col items-center space-y-4 mb-6">
             <Label htmlFor="profile-picture" className="text-lg font-medium">Profile Picture</Label>
             <Avatar className="h-24 w-24">
-              <AvatarImage src={accountSettings.avatarUrl} alt="Profile Picture" />
+              <AvatarImage src={accountSettings.avatar_url} alt="Profile Picture" />
               <AvatarFallback>
                 <User className="h-12 w-12 text-muted-foreground" />
               </AvatarFallback>
@@ -161,20 +280,20 @@ const SettingsPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="first_name">First Name</Label>
               <Input
-                id="firstName"
-                value={accountSettings.firstName}
-                onChange={handleInputChange}
+                id="first_name"
+                value={accountSettings.first_name}
+                onChange={(e) => handleSupabaseInputChange('first_name', e.target.value)}
                 placeholder="John"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
+              <Label htmlFor="last_name">Last Name</Label>
               <Input
-                id="lastName"
-                value={accountSettings.lastName}
-                onChange={handleInputChange}
+                id="last_name"
+                value={accountSettings.last_name}
+                onChange={(e) => handleSupabaseInputChange('last_name', e.target.value)}
                 placeholder="Doe"
               />
             </div>
