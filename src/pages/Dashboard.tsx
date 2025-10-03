@@ -15,6 +15,8 @@ const Dashboard = () => {
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [todaySpending, setTodaySpending] = useState(0);
   const [loadingSpending, setLoadingSpending] = useState(true);
+  const [loggedWorkoutsCount, setLoggedWorkoutsCount] = useState(0);
+  const [loadingWorkouts, setLoadingWorkouts] = useState(true);
 
   useEffect(() => {
     const fetchCompletedTasks = async () => {
@@ -70,6 +72,31 @@ const Dashboard = () => {
     fetchTodaySpending();
   }, [userId]);
 
+  useEffect(() => {
+    const fetchLoggedWorkouts = async () => {
+      if (!userId) {
+        setLoggedWorkoutsCount(0);
+        setLoadingWorkouts(false);
+        return;
+      }
+      setLoadingWorkouts(true);
+      const { count, error } = await supabase
+        .from('workouts')
+        .select('*', { count: 'exact' })
+        .eq('user_id', userId);
+
+      if (error) {
+        console.error("Error fetching logged workouts:", error.message);
+        setLoggedWorkoutsCount(0);
+      } else {
+        setLoggedWorkoutsCount(count || 0);
+      }
+      setLoadingWorkouts(false);
+    };
+
+    fetchLoggedWorkouts();
+  }, [userId]);
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -114,9 +141,11 @@ const Dashboard = () => {
             <Dumbbell className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">0 workouts logged</div>
+            <div className="text-2xl font-bold">
+              {loadingWorkouts ? "..." : `${loggedWorkoutsCount} exercises logged`}
+            </div>
             <p className="text-xs text-muted-foreground">
-              No exercises completed
+              {loadingWorkouts ? "Loading..." : (loggedWorkoutsCount === 0 ? "No exercises logged yet" : "From your workout tracker")}
             </p>
           </CardContent>
         </Card>
