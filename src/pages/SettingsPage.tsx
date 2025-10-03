@@ -15,8 +15,10 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Import Dialog components
-import { ProfilePictureCropper } from "@/components/settings/ProfilePictureCropper"; // Import the new cropper component
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ProfilePictureCropper } from "@/components/settings/ProfilePictureCropper";
+import { supabase } from '@/integrations/supabase/client'; // Import supabase client
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 interface UserAccountSettings {
   firstName: string;
@@ -32,6 +34,7 @@ const LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY = "userAccountSettings";
 
 const SettingsPage = () => {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate(); // Initialize useNavigate
   const [accountSettings, setAccountSettings] = useState<UserAccountSettings>(() =>
     loadState(LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY, {
       firstName: "",
@@ -96,6 +99,16 @@ const SettingsPage = () => {
     toast.success("Account settings saved successfully!");
   };
 
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error("Failed to log out: " + error.message);
+    } else {
+      toast.success("Logged out successfully!");
+      navigate('/login'); // Redirect to login page
+    }
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Settings</h1>
@@ -118,6 +131,9 @@ const SettingsPage = () => {
             <Label htmlFor="notifications">Enable Notifications</Label>
             <Switch id="notifications" disabled />
           </div>
+          <Button onClick={handleLogout} variant="destructive" className="w-full">
+            Log Out
+          </Button>
         </CardContent>
       </Card>
 
