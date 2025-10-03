@@ -30,7 +30,15 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: { x: number; y:
   // draw rotated image and save context
   ctx.drawImage(image, safeArea / 2 - image.width / 2, safeArea / 2 - image.height / 2);
 
-  const data = ctx.getImageData(pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height);
+  // Calculate offsets for the image on the large canvas
+  const imageOffsetX = (safeArea - image.width) / 2;
+  const imageOffsetY = (safeArea - image.height) / 2;
+
+  // Adjust pixelCrop coordinates relative to the large canvas
+  const croppedX = pixelCrop.x + imageOffsetX;
+  const croppedY = pixelCrop.y + imageOffsetY;
+
+  const data = ctx.getImageData(croppedX, croppedY, pixelCrop.width, pixelCrop.height);
 
   // set canvas width to final desired crop size - this will clear the canvas
   canvas.width = pixelCrop.width;
