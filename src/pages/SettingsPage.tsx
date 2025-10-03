@@ -4,11 +4,17 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input"; // Import Input
-import { Button } from "@/components/ui/button"; // Import Button
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import { loadState, saveState } from "@/lib/localStorage"; // Import loadState and saveState
-import { toast } from "sonner"; // Import toast
+import { loadState, saveState } from "@/lib/localStorage";
+import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon, User } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface UserAccountSettings {
   firstName: string;
@@ -16,6 +22,8 @@ interface UserAccountSettings {
   age: number | '';
   height: number | ''; // Assuming cm
   weight: number | ''; // Assuming kg
+  birthDate: string | undefined; // Stored as YYYY-MM-DD string
+  avatarUrl: string | undefined; // Stored as data URL string
 }
 
 const LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY = "userAccountSettings";
@@ -29,6 +37,8 @@ const SettingsPage = () => {
       age: "",
       height: "",
       weight: "",
+      birthDate: undefined,
+      avatarUrl: undefined,
     })
   );
 
@@ -46,6 +56,28 @@ const SettingsPage = () => {
       ...prevSettings,
       [id]: id === "age" || id === "height" || id === "weight" ? (value === "" ? "" : Number(value)) : value,
     }));
+  };
+
+  const handleBirthDateSelect = (date: Date | undefined) => {
+    setAccountSettings((prevSettings) => ({
+      ...prevSettings,
+      birthDate: date ? format(date, "yyyy-MM-dd") : undefined,
+    }));
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAccountSettings((prevSettings) => ({
+          ...prevSettings,
+          avatarUrl: reader.result as string,
+        }));
+        toast.success("Profile picture updated!");
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSaveAccountSettings = () => {
@@ -83,6 +115,23 @@ const SettingsPage = () => {
           <CardTitle>Account Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="flex flex-col items-center space-y-4 mb-6">
+            <Label htmlFor="profile-picture" className="text-lg font-medium">Profile Picture</Label>
+            <Avatar className="h-24 w-24">
+              <AvatarImage src={accountSettings.avatarUrl} alt="Profile Picture" />
+              <AvatarFallback>
+                <User className="h-12 w-12 text-muted-foreground" />
+              </AvatarFallback>
+            </Avatar>
+            <Input
+              id="profile-picture"
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="w-full max-w-xs"
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
@@ -131,6 +180,32 @@ const SettingsPage = () => {
                 onChange={handleInputChange}
                 placeholder="70"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="birthDate">Birth Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="birthDate"
+                    variant={"outline"}
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !accountSettings.birthDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {accountSettings.birthDate ? format(new Date(accountSettings.birthDate), "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={accountSettings.birthDate ? new Date(accountSettings.birthDate) : undefined}
+                    onSelect={handleBirthDateSelect}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           <Button onClick={handleSaveAccountSettings} className="w-full md:w-auto mt-4">
