@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, DollarSign, Dumbbell, BookOpen } from "lucide-react"; // Import the missing icons
+import { Clock, DollarSign, Dumbbell, BookOpen } from "lucide-react";
 
 const Dashboard = () => {
   return (
@@ -19,9 +19,9 @@ const Dashboard = () => {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3/5 tasks completed</div>
+            <div className="text-2xl font-bold">0 tasks completed</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% from yesterday
+              No recent changes
             </p>
           </CardContent>
         </Card>
@@ -33,9 +33,9 @@ const Dashboard = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45.00</div>
+            <div className="text-2xl font-bold">$0.00</div>
             <p className="text-xs text-muted-foreground">
-              -15% from yesterday
+              No spending recorded
             </p>
           </CardContent>
         </Card>
@@ -45,9 +45,9 @@ const Dashboard = () => {
             <Dumbbell className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1 workout logged</div>
+            <div className="text-2xl font-bold">0 workouts logged</div>
             <p className="text-xs text-muted-foreground">
-              Completed 3 exercises
+              No exercises completed
             </p>
           </CardContent>
         </Card>
@@ -57,9 +57,9 @@ const Dashboard = () => {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2 topics completed</div>
+            <div className="text-2xl font-bold">0 topics completed</div>
             <p className="text-xs text-muted-foreground">
-              On track for weekly goal
+              No topics started
             </p>
           </CardContent>
         </Card>
@@ -70,12 +70,7 @@ const Dashboard = () => {
           <CardTitle>Completed Activities</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="list-disc list-inside text-muted-foreground">
-            <li>Morning run (Workout Log)</li>
-            <li>Read "Clean Code" chapter 3 (Self-Learning)</li>
-            <li>Team stand-up (Time Schedule)</li>
-            <li>Bought groceries ($25) (Spending Tracker)</li>
-          </ul>
+          <p className="text-muted-foreground">No activities completed yet.</p>
         </CardContent>
       </Card>
     </div>
