@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { getCroppedImg } from '@/lib/imageUtils';
 import { RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
-import { Label } from '@/components/ui/label'; // Added missing import
+import { Label } from '@/components/ui/label';
 
 interface ProfilePictureCropperProps {
   imageSrc: string;
@@ -26,11 +26,11 @@ export function ProfilePictureCropper({ imageSrc, onCropComplete, onClose }: Pro
   }, []);
 
   const onZoomChange = useCallback((zoom: number[]) => {
-    setZoom(zoom[0]);
+    setZoom(zoom[0]); // Extract the single number from the array
   }, []);
 
   const onRotationChange = useCallback((rotation: number[]) => {
-    setRotation(rotation[0]);
+    setRotation(rotation[0]); // Extract the single number from the array
   }, []);
 
   const onCropCompleteCallback = useCallback((croppedArea: any, croppedAreaPixels: any) => {

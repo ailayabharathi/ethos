@@ -10,6 +10,7 @@ import { Edit, Trash2 } from "lucide-react";
 import { WorkoutItem } from "./WorkoutForm";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils"; // Added import for cn
 
 interface WorkoutListProps {
   workouts: WorkoutItem[];
