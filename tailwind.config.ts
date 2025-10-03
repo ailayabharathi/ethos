@@ -22,6 +22,7 @@ export default {
         fandom: ["'DC Fandom'", "cursive"], // Custom font for Dashboard greeting
         ramen: ["'Japan Ramen'", "cursive"], // Custom font for Workout Log
         minecraft: ["'Minecraft Medium'", "sans-serif"], // New custom font for Self-Learning Topics
+        timebomb: ["'Ticking Timebomb BB'", "cursive"], // New custom font for Time Schedule
         japanese: ["'Noto Sans JP'", "sans-serif"], // Kept for reference
       },
       colors: {

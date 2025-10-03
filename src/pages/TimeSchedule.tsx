@@ -167,7 +167,7 @@ const TimeSchedule = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Time Schedule</h1>
+      <h1 className="text-3xl font-bold font-timebomb">Time Schedule</h1> {/* Applied font-timebomb */}
       <p className="text-muted-foreground">Manage your daily activities and tasks.</p>
 
       <Card>
