@@ -203,6 +203,9 @@ const SettingsPage = () => {
                     selected={accountSettings.birthDate ? new Date(accountSettings.birthDate) : undefined}
                     onSelect={handleBirthDateSelect}
                     initialFocus
+                    captionLayout="dropdown" // Added for year and month dropdowns
+                    fromYear={1900} // Optional: Set a reasonable start year
+                    toYear={new Date().getFullYear()} // Optional: Set current year as end year
                   />
                 </PopoverContent>
               </Popover>
