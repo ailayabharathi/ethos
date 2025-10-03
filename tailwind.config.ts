@@ -18,8 +18,9 @@ export default {
       },
     },
     extend: {
-      fontFamily: { // Added font family extension
-        japanese: ["'Noto Sans JP'", "sans-serif"],
+      fontFamily: {
+        devil: ["'Luckiest Guy'", "cursive"], // New font family for the devil style
+        japanese: ["'Noto Sans JP'", "sans-serif"], // Kept for reference, but not used for greeting
       },
       colors: {
         border: "hsl(var(--border))",

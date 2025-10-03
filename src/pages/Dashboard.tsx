@@ -131,7 +131,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-4xl font-extrabold italic text-red-600 dark:text-red-400 font-japanese">
+      <h1 className="text-4xl font-extrabold italic text-red-600 dark:text-red-400 font-devil">
         {loadingProfile ? "Loading..." : greeting}
       </h1>
       <p className="text-muted-foreground">A quick overview of your daily progress.</p>
