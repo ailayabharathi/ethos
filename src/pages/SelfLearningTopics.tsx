@@ -103,7 +103,7 @@ const SelfLearningTopics = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Add New Topic</CardTitle>
+          <CardTitle className="font-naruto">Add New Topic</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -133,7 +133,7 @@ const SelfLearningTopics = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>My Learning Topics</CardTitle>
+          <CardTitle className="font-naruto">My Learning Topics</CardTitle>
         </CardHeader>
         <CardContent>
           {topics.length === 0 ? (

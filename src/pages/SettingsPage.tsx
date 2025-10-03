@@ -235,7 +235,7 @@ const SettingsPage = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>General Settings</CardTitle>
+          <CardTitle className="font-naruto">General Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
@@ -258,7 +258,7 @@ const SettingsPage = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Account Settings</CardTitle>
+          <CardTitle className="font-naruto">Account Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col items-center space-y-4 mb-6">

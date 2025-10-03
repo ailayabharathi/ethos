@@ -172,7 +172,7 @@ const TimeSchedule = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Add New Task</CardTitle>
+          <CardTitle className="font-naruto">Add New Task</CardTitle>
         </CardHeader>
         <CardContent className="flex space-x-2">
           <Input
@@ -194,7 +194,7 @@ const TimeSchedule = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Today's Tasks</CardTitle>
+          <CardTitle className="font-naruto">Today's Tasks</CardTitle>
         </CardHeader>
         <CardContent>
           {tasks.length === 0 ? (

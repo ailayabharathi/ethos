@@ -78,7 +78,7 @@ export function WorkoutList({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>All {workoutType === "home" ? "Home" : "Gym"} Exercises</CardTitle>
+        <CardTitle className="font-naruto">All {workoutType === "home" ? "Home" : "Gym"} Exercises</CardTitle>
       </CardHeader>
       <CardContent>
         {sortedWorkouts.length === 0 ? (

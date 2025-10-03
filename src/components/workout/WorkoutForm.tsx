@@ -81,7 +81,7 @@ export function WorkoutForm({ onAddWorkout, workoutType }: WorkoutFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add New Exercise</CardTitle>
+        <CardTitle className="font-naruto">Add New Exercise</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">

@@ -19,7 +19,7 @@ export function ExpenseList({ expenses, onDeleteExpense }: ExpenseListProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>All Expenses</CardTitle>
+        <CardTitle className="font-naruto">All Expenses</CardTitle>
       </CardHeader>
       <CardContent>
         {sortedExpenses.length === 0 ? (

@@ -25,6 +25,7 @@ export default {
         timebomb: ["'Ticking Timebomb BB'", "cursive"], // New custom font for Time Schedule
         holdmoney: ["'HoldMoney Regular'", "sans-serif"], // New custom font for Spending Tracker
         quantum: ["'Quantum Regular'", "sans-serif"], // New custom font for Settings
+        naruto: ["'njnaruto'", "sans-serif"], // New custom font for various card titles
         japanese: ["'Noto Sans JP'", "sans-serif"], // Kept for reference
       },
       colors: {

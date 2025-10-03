@@ -110,7 +110,7 @@ const SpendingTracker = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Spending Overview</CardTitle>
+          <CardTitle className="font-naruto">Spending Overview</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex justify-center mb-4">

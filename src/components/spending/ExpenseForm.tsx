@@ -66,7 +66,7 @@ export function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add New Expense</CardTitle>
+        <CardTitle className="font-naruto">Add New Expense</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
