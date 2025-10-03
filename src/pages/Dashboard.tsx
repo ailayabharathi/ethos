@@ -11,12 +11,42 @@ const Dashboard = () => {
   const { session } = useSession();
   const userId = session?.user?.id;
 
+  const [userName, setUserName] = useState<string>(""); // New state for user's first name
+  const [loadingProfile, setLoadingProfile] = useState(true); // New loading state for profile
+
   const [completedTasksCount, setCompletedTasksCount] = useState(0);
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [todaySpending, setTodaySpending] = useState(0);
   const [loadingSpending, setLoadingSpending] = useState(true);
   const [loggedWorkoutsCount, setLoggedWorkoutsCount] = useState(0);
   const [loadingWorkouts, setLoadingWorkouts] = useState(true);
+
+  // Effect to fetch user's first name
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (!userId) {
+        setUserName("");
+        setLoadingProfile(false);
+        return;
+      }
+      setLoadingProfile(true);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('first_name')
+        .eq('id', userId)
+        .single();
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
+        console.error("Error fetching user profile:", error.message);
+        setUserName("");
+      } else if (data) {
+        setUserName(data.first_name || "");
+      }
+      setLoadingProfile(false);
+    };
+
+    fetchUserName();
+  }, [userId]);
 
   useEffect(() => {
     const fetchCompletedTasks = async () => {
@@ -97,9 +127,11 @@ const Dashboard = () => {
     fetchLoggedWorkouts();
   }, [userId]);
 
+  const greeting = userName ? `Welcome, ${userName}!` : "Dashboard";
+
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">{loadingProfile ? "Loading..." : greeting}</h1>
       <p className="text-muted-foreground">A quick overview of your daily progress.</p>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
