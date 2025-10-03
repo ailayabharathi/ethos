@@ -38,8 +38,8 @@ export function MainLayout({ children }: MainLayoutProps) {
           <div className="flex h-full flex-col border-r bg-sidebar">
             <div className="p-4 border-b flex items-center justify-between">
               {!isSidebarCollapsed && (
-                <h2 className="text-xl font-semibold text-sidebar-primary-foreground whitespace-nowrap overflow-hidden">
-                  Productivity App
+                <h2 className="text-xl font-semibold text-indigo-400 whitespace-nowrap overflow-hidden">
+                  Ethos
                 </h2>
               )}
               <Button
