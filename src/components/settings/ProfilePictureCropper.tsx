@@ -25,12 +25,22 @@ export function ProfilePictureCropper({ imageSrc, onCropComplete, onClose }: Pro
     setCrop(crop);
   }, []);
 
-  const onZoomChange = useCallback((zoom: number[]) => {
-    setZoom(zoom[0]); // Extract the single number from the array
+  // Callbacks for the Slider component (receives number[])
+  const handleSliderZoomChange = useCallback((value: number[]) => {
+    setZoom(value[0]);
   }, []);
 
-  const onRotationChange = useCallback((rotation: number[]) => {
-    setRotation(rotation[0]); // Extract the single number from the array
+  const handleSliderRotationChange = useCallback((value: number[]) => {
+    setRotation(value[0]);
+  }, []);
+
+  // Callbacks for the Cropper component (receives single number)
+  const handleCropperZoomChange = useCallback((newZoom: number) => {
+    setZoom(newZoom);
+  }, []);
+
+  const handleCropperRotationChange = useCallback((newRotation: number) => {
+    setRotation(newRotation);
   }, []);
 
   const onCropCompleteCallback = useCallback((croppedArea: any, croppedAreaPixels: any) => {
@@ -57,8 +67,8 @@ export function ProfilePictureCropper({ imageSrc, onCropComplete, onClose }: Pro
           rotation={rotation}
           aspect={1} // Square aspect ratio for profile pictures
           onCropChange={onCropChange}
-          onZoomChange={onZoomChange}
-          onRotationChange={onRotationChange}
+          onZoomChange={handleCropperZoomChange} // Pass the function that expects a single number
+          onRotationChange={handleCropperRotationChange} // Pass the function that expects a single number
           onCropComplete={onCropCompleteCallback}
           cropShape="round" // Circular crop area
           showGrid={false}
@@ -75,7 +85,7 @@ export function ProfilePictureCropper({ imageSrc, onCropComplete, onClose }: Pro
           max={3}
           step={0.1}
           value={[zoom]}
-          onValueChange={onZoomChange}
+          onValueChange={handleSliderZoomChange} // Pass the function that expects a number[]
           className="flex-1"
         />
         <ZoomIn className="h-4 w-4 text-muted-foreground" />
@@ -91,7 +101,7 @@ export function ProfilePictureCropper({ imageSrc, onCropComplete, onClose }: Pro
           max={360}
           step={1}
           value={[rotation]}
-          onValueChange={onRotationChange}
+          onValueChange={handleSliderRotationChange} // Pass the function that expects a number[]
           className="flex-1"
         />
       </div>
