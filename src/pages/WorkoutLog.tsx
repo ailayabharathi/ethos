@@ -11,14 +11,16 @@ const WorkoutLog = () => {
       <p className="text-muted-foreground">Log your exercises and track your fitness progress.</p>
 
       <Tabs defaultValue="home" className="w-full">
-        <TabsList className="grid w-full grid-cols-1"> {/* Changed to grid-cols-1 */}
+        <TabsList className="grid w-full grid-cols-2"> {/* Changed to grid-cols-2 for two tabs */}
           <TabsTrigger value="home">Home Workouts</TabsTrigger>
-          {/* Removed TabsTrigger for Gym Workouts */}
+          <TabsTrigger value="gym">Gym Workouts</TabsTrigger> {/* Added TabsTrigger for Gym Workouts */}
         </TabsList>
         <TabsContent value="home">
           <WorkoutTypeSection type="home" />
         </TabsContent>
-        {/* Removed TabsContent for Gym Workouts */}
+        <TabsContent value="gym"> {/* Added TabsContent for Gym Workouts */}
+          <WorkoutTypeSection type="gym" />
+        </TabsContent>
       </Tabs>
     </div>
   );

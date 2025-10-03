@@ -94,7 +94,7 @@ export function WorkoutList({
                   <Checkbox
                     id={`workout-${workout.id}`}
                     checked={workout.completed}
-                    onCheckedChange={() => onToggleComplete(workout.id)}
+                    onCheckedChange={() => onToggleComplete(workout.id, workout.completed)}
                     className="mr-3"
                   />
                   {editingWorkoutId === workout.id ? (
@@ -151,7 +151,7 @@ export function WorkoutList({
                       )}
                     >
                       {workout.name} - {workout.sets} sets of {workout.reps} reps
-                      {workout.weight !== undefined && ` at ${workout.weight}kg`}
+                      {workoutType === "gym" && workout.weight !== undefined && workout.weight !== null && ` at ${workout.weight}kg`}
                       <span className="text-sm text-muted-foreground ml-2">({format(new Date(workout.date), "PPP")})</span>
                     </Label>
                   )}
