@@ -1,0 +1,48 @@
+export const createImage = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener('load', () => resolve(image));
+    image.addEventListener('error', (error) => reject(error));
+    image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues on CodeSandbox
+    image.src = url;
+  });
+
+export const getCroppedImg = async (imageSrc: string, pixelCrop: { x: number; y: number; width: number; height: number }, rotation = 0): Promise<string> => {
+  const image = await createImage(imageSrc);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) {
+    throw new Error('No 2d context available');
+  }
+
+  const safeArea = Math.max(image.width, image.height) * 2;
+
+  // set canvas size to match the bounding box of the rotated image
+  canvas.width = safeArea;
+  canvas.height = safeArea;
+
+  // translate canvas context to a central point on the canvas
+  ctx.translate(safeArea / 2, safeArea / 2);
+  ctx.rotate(rotation * Math.PI / 180);
+  ctx.translate(-safeArea / 2, -safeArea / 2);
+
+  // draw rotated image and save context
+  ctx.drawImage(image, safeArea / 2 - image.width / 2, safeArea / 2 - image.height / 2);
+
+  const data = ctx.getImageData(pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height);
+
+  // set canvas width to final desired crop size - this will clear the canvas
+  canvas.width = pixelCrop.width;
+  canvas.height = pixelCrop.height;
+
+  // paste generated image data into canvas
+  ctx.putImageData(data, 0, 0);
+
+  // return as data URL
+  return new Promise((resolve) => {
+    canvas.toBlob((file) => {
+      resolve(URL.createObjectURL(file!));
+    }, 'image/jpeg');
+  });
+};

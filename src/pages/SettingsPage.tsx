@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Import Dialog components
+import { ProfilePictureCropper } from "@/components/settings/ProfilePictureCropper"; // Import the new cropper component
 
 interface UserAccountSettings {
   firstName: string;
@@ -41,6 +43,8 @@ const SettingsPage = () => {
       avatarUrl: undefined,
     })
   );
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null);
 
   useEffect(() => {
     saveState(LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY, accountSettings);
@@ -70,14 +74,21 @@ const SettingsPage = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setAccountSettings((prevSettings) => ({
-          ...prevSettings,
-          avatarUrl: reader.result as string,
-        }));
-        toast.success("Profile picture updated!");
+        setImageToCrop(reader.result as string);
+        setIsCropperOpen(true);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCropComplete = (croppedImage: string) => {
+    setAccountSettings((prevSettings) => ({
+      ...prevSettings,
+      avatarUrl: croppedImage,
+    }));
+    toast.success("Profile picture updated!");
+    setIsCropperOpen(false);
+    setImageToCrop(null);
   };
 
   const handleSaveAccountSettings = () => {
@@ -203,9 +214,9 @@ const SettingsPage = () => {
                     selected={accountSettings.birthDate ? new Date(accountSettings.birthDate) : undefined}
                     onSelect={handleBirthDateSelect}
                     initialFocus
-                    captionLayout="dropdown" // Added for year and month dropdowns
-                    fromYear={1900} // Optional: Set a reasonable start year
-                    toYear={new Date().getFullYear()} // Optional: Set current year as end year
+                    captionLayout="dropdown"
+                    fromYear={1900}
+                    toYear={new Date().getFullYear()}
                   />
                 </PopoverContent>
               </Popover>
@@ -216,6 +227,21 @@ const SettingsPage = () => {
           </Button>
         </CardContent>
       </Card>
+
+      <Dialog open={isCropperOpen} onOpenChange={setIsCropperOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Crop Profile Picture</DialogTitle>
+          </DialogHeader>
+          {imageToCrop && (
+            <ProfilePictureCropper
+              imageSrc={imageToCrop}
+              onCropComplete={handleCropComplete}
+              onClose={() => setIsCropperOpen(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
