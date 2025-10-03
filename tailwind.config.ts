@@ -19,7 +19,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        devil: ["'Luckiest Guy'", "cursive"], // New font family for the devil style
+        fandom: ["'DC Fandom'", "cursive"], // New font family for the custom font
         japanese: ["'Noto Sans JP'", "sans-serif"], // Kept for reference, but not used for greeting
       },
       colors: {

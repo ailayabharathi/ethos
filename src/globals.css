@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+/* Removed Google Font import for 'Luckiest Guy' */
+
+@font-face {
+  font-family: 'DC Fandom';
+  src: url('/fonts/dc-fandom-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @layer base {
   :root {
