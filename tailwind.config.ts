@@ -24,6 +24,7 @@ export default {
         minecraft: ["'Minecraft Medium'", "sans-serif"], // New custom font for Self-Learning Topics
         timebomb: ["'Ticking Timebomb BB'", "cursive"], // New custom font for Time Schedule
         holdmoney: ["'HoldMoney Regular'", "sans-serif"], // New custom font for Spending Tracker
+        quantum: ["'Quantum Regular'", "sans-serif"], // New custom font for Settings
         japanese: ["'Noto Sans JP'", "sans-serif"], // Kept for reference
       },
       colors: {

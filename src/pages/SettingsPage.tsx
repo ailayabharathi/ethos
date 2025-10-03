@@ -230,7 +230,7 @@ const SettingsPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Settings</h1>
+      <h1 className="text-3xl font-bold font-quantum">Settings</h1> {/* Applied font-quantum */}
       <p className="text-muted-foreground">Manage your application preferences.</p>
 
       <Card>
