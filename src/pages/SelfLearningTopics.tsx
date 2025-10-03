@@ -98,7 +98,7 @@ const SelfLearningTopics = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Self-Learning Topics</h1>
+      <h1 className="text-3xl font-bold font-minecraft">Self-Learning Topics</h1> {/* Applied font-minecraft */}
       <p className="text-muted-foreground">Manage your learning topics and mark them as complete.</p>
 
       <Card>
