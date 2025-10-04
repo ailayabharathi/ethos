@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"; // Added import for cn
 
 interface WorkoutListProps {
   workouts: WorkoutItem[];
-  onToggleComplete: (id: string) => void;
+  onToggleComplete: (id: string, currentCompleted: boolean) => void; // Fixed: Added currentCompleted to prop type
   onDeleteWorkout: (id: string) => void;
   onEditWorkout: (id: string, updatedWorkout: Partial<WorkoutItem>) => void;
   workoutType: "home" | "gym";

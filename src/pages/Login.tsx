@@ -5,7 +5,7 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@/components/auth/SessionContextProvider';
-import { useNavigate } => 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Fixed import syntax
 
 const Login = () => {
   const { session } = useSession();
@@ -55,7 +55,7 @@ const Login = () => {
           localization={{
             variables: {
               sign_in: {
-                sign_up_link_text: '', // This will hide the "Don't have an account? Sign up" link
+                link_text: '', // Fixed: Changed sign_up_link_text to link_text to hide the "Don't have an account? Sign up" link
               },
             },
           }}
