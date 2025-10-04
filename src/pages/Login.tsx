@@ -33,10 +33,7 @@ const Login = () => {
             variables: {
               default: {
                 colors: {
-                  // Diagnostic colors to ensure visibility of input and potential toggle
-                  inputBackground: 'white', // Force white background for visibility
-                  inputText: 'black',     // Force black text for visibility
-                  // Re-adding other original theme variables to maintain overall look
+                  // Reverted diagnostic colors to allow theme inheritance
                   brand: 'hsl(var(--primary))',
                   brandAccent: 'hsl(var(--primary-foreground))',
                   inputBorder: 'hsl(var(--border))',
