@@ -30,23 +30,7 @@ const Login = () => {
           providers={[]} // You can add 'google', 'github', etc. here if desired
           appearance={{
             theme: ThemeSupa,
-            variables: {
-              default: {
-                colors: {
-                  brand: 'hsl(var(--primary))',
-                  brandAccent: 'hsl(var(--primary-foreground))',
-                  inputBackground: 'hsl(var(--input))',
-                  inputBorder: 'hsl(var(--border))',
-                  inputBorderHover: 'hsl(var(--ring))',
-                  inputBorderFocus: 'hsl(var(--ring))',
-                  inputText: 'hsl(var(--foreground))',
-                  defaultButtonBackground: 'hsl(var(--secondary))',
-                  defaultButtonBackgroundHover: 'hsl(var(--secondary-foreground))',
-                  defaultButtonBorder: 'hsl(var(--border))',
-                  defaultButtonText: 'hsl(var(--secondary-foreground))',
-                },
-              },
-            },
+            // Removed custom variables to ensure default password toggle functionality
           }}
           theme="dark" // Using dark theme for Auth UI to match app's dark mode
           redirectTo={window.location.origin + '/'} // Redirect to home after successful login
