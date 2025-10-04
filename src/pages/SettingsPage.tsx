@@ -36,7 +36,7 @@ interface UserAccountSettings {
 const LOCAL_STORAGE_ACCOUNT_SETTINGS_KEY = "userAccountSettingsLocal";
 
 const SettingsPage = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme(); // Keep useTheme for potential future theme-related settings or context
   const navigate = useNavigate();
   const { session } = useSession();
   const userId = session?.user?.id;
@@ -96,9 +96,7 @@ const SettingsPage = () => {
     fetchProfile();
   }, [userId]);
 
-  const handleDarkModeToggle = (checked: boolean) => {
-    setTheme(checked ? "dark" : "light");
-  };
+  // Removed handleDarkModeToggle as it's now in Header
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -238,14 +236,7 @@ const SettingsPage = () => {
           <CardTitle className="font-naruto">General Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="dark-mode">Enable Dark Mode</Label>
-            <Switch
-              id="dark-mode"
-              checked={theme === "dark"}
-              onCheckedChange={handleDarkModeToggle}
-            />
-          </div>
+          {/* Removed dark mode toggle from here */}
           <div className="flex items-center justify-between">
             <Label htmlFor="notifications">Enable Notifications</Label>
             <Switch id="notifications" disabled />
