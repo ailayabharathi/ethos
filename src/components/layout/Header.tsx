@@ -33,7 +33,7 @@ export function Header() {
 
   return (
     <header className="fixed bottom-0 z-40 w-full border-t bg-background/80 backdrop-blur-sm">
-      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="container flex h-16 items-center justify-between"> {/* Removed px-4 sm:px-6 lg:px-8 */}
         <Link to="/" className="flex items-center space-x-2">
           <span className="text-xl font-semibold text-indigo-400 whitespace-nowrap">Ethos</span>
         </Link>
