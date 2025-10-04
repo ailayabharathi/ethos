@@ -50,6 +50,13 @@ const Login = () => {
           }}
           theme="dark" // Using dark theme for Auth UI to match app's dark mode
           redirectTo={window.location.origin + '/'} // Redirect to home after successful login
+          localization={{
+            variables: {
+              sign_in: {
+                sign_up_link_text: '', // This will hide the "Don't have an account? Sign up" link
+              },
+            },
+          }}
         />
       </div>
     </div>
