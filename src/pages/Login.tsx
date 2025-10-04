@@ -5,7 +5,7 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
 import { useSession } from '@/components/auth/SessionContextProvider';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } => 'react-router-dom';
 
 const Login = () => {
   const { session } = useSession();
@@ -30,7 +30,25 @@ const Login = () => {
           providers={[]} // You can add 'google', 'github', etc. here if desired
           appearance={{
             theme: ThemeSupa,
-            // Removed custom variables to ensure default password toggle functionality
+            variables: {
+              default: {
+                colors: {
+                  // Diagnostic colors to ensure visibility of input and potential toggle
+                  inputBackground: 'white', // Force white background for visibility
+                  inputText: 'black',     // Force black text for visibility
+                  // Re-adding other original theme variables to maintain overall look
+                  brand: 'hsl(var(--primary))',
+                  brandAccent: 'hsl(var(--primary-foreground))',
+                  inputBorder: 'hsl(var(--border))',
+                  inputBorderHover: 'hsl(var(--ring))',
+                  inputBorderFocus: 'hsl(var(--ring))',
+                  defaultButtonBackground: 'hsl(var(--secondary))',
+                  defaultButtonBackgroundHover: 'hsl(var(--secondary-foreground))',
+                  defaultButtonBorder: 'hsl(var(--border))',
+                  defaultButtonText: 'hsl(var(--secondary-foreground))',
+                },
+              },
+            },
           }}
           theme="dark" // Using dark theme for Auth UI to match app's dark mode
           redirectTo={window.location.origin + '/'} // Redirect to home after successful login
